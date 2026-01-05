@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'UI/Home/home_screen.dart';
+import 'Utils/routes_App.dart';
+
 void main (){
   runApp(const EcommerceApp());
 }
@@ -8,6 +11,12 @@ class EcommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: RoutesApp.homeScreen,
+      routes: {
+        RoutesApp.homeScreen: (context) => HomeScreen(),
+      },
+    );
   }
 }
