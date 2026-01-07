@@ -1,10 +1,15 @@
-import 'package:e_commerce/Utils/color_app.dart';
+import 'package:e_commerce/core/Utils/color_app.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextApp {
   static TextStyle semiBold24Blue = GoogleFonts.poppins(
     color: ColorApp.primaryBlue,
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
+  static TextStyle semiBold24White = GoogleFonts.poppins(
+    color: ColorApp.primaryWhite,
     fontSize: 24,
     fontWeight: FontWeight.w600,
   );
@@ -28,13 +33,23 @@ class TextApp {
     fontSize: 18,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle medium18Red = GoogleFonts.poppins(
+    color: ColorApp.red,
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle medium15Red = GoogleFonts.poppins(
+    color: ColorApp.red,
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+  );
   static TextStyle light18Blue = GoogleFonts.poppins(
     color: ColorApp.primaryWhite,
     fontSize: 18,
     fontWeight: FontWeight.w300,
   );
   static TextStyle light18White = GoogleFonts.poppins(
-    color: ColorApp.primaryBlue,
+    color: ColorApp.primaryWhite,
     fontSize: 18,
     fontWeight: FontWeight.w300,
   );
