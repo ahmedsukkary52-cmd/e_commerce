@@ -1,6 +1,7 @@
 import 'package:e_commerce/core/Utils/theme_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'config/di.dart';
 import 'core/Utils/routes_App.dart';
 import 'features/UI/pages/Cart/cart_screen.dart';
 import 'features/UI/pages/Home/home_screen.dart';
@@ -9,6 +10,7 @@ import 'features/UI/pages/Product/product_screen.dart';
 import 'features/UI/Auth/Register/register_screen.dart';
 
 void main() {
+  configureDependencies();
   runApp(const EcommerceApp());
 }
 
