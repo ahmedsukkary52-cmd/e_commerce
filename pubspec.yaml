@@ -39,6 +39,14 @@ dependencies:
   fluttertoast: ^9.0.0
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.3
+  retrofit: ^4.9.2
+  logger: ^2.6.2
+  json_annotation: ^4.9.0
+  injectable: ^2.7.1+4
+  get_it: ^9.2.0
+  dio: ^5.9.0
+  pretty_dio_logger: ^1.4.0
+  flutter_bloc: ^9.1.1
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +58,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  retrofit_generator: ^10.2.1
+  json_serializable: ^6.11.3
+  injectable_generator: ^2.12.0
+  build_runner: ^2.10.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
