@@ -1,4 +1,4 @@
-import 'package:e_commerce/Domain/entities/response/user.dart';
+import 'package:e_commerce/Domain/entities/response/common/user.dart';
 
 class AuthResponse {
   final String? message;
