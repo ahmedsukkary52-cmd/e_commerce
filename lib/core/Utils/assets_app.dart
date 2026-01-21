@@ -11,7 +11,9 @@ class AssetsApp {
 
   static const String addPro = '${_iconsPath}addProduct.svg';
   static const String addToCart = '${_iconsPath}addToCart.svg';
+
   static const String cart = '${_iconsPath}cart.svg';
+  static const String star = '${_iconsPath}star.svg';
 
   static const String category = '${_iconsPath}category.svg';
   static const String categoryS = '${_iconsPath}categorySelect.svg';

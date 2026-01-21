@@ -1,11 +1,11 @@
 import 'package:e_commerce/Data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:e_commerce/Domain/entities/request/login_request.dart';
 import 'package:e_commerce/Domain/entities/request/register_request.dart';
-import 'package:e_commerce/Domain/entities/response/auth_response.dart';
+import 'package:e_commerce/Domain/entities/response/auth/auth_response.dart';
 import 'package:e_commerce/api/api_services.dart';
-import 'package:e_commerce/api/mappers/auth_response_mapper.dart';
-import 'package:e_commerce/api/mappers/login_request_mapper.dart';
-import 'package:e_commerce/api/mappers/register_request_mapper.dart';
+import 'package:e_commerce/api/mappers/auth/auth_response_mapper.dart';
+import 'package:e_commerce/api/mappers/auth/login_request_mapper.dart';
+import 'package:e_commerce/api/mappers/auth/register_request_mapper.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: AuthRemoteDataSource)

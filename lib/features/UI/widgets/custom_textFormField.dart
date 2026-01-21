@@ -73,8 +73,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       suffixIcon: widget.isPassword ? _buildSuffixIcon() : null,
       enabledBorder: _outlineBorder(ColorApp.gray),
       focusedBorder: _outlineBorder(ColorApp.gray),
-      errorBorder: _outlineBorder(ColorApp.red),
-      focusedErrorBorder: _outlineBorder(ColorApp.red),
+      errorBorder: _outlineBorder(ColorApp.redColor),
+      focusedErrorBorder: _outlineBorder(ColorApp.redColor),
     );
   }
 

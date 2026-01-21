@@ -1,4 +1,4 @@
-import 'package:e_commerce/Domain/entities/response/auth_response.dart';
+import 'package:e_commerce/Domain/entities/response/auth/auth_response.dart';
 
 sealed class AuthStates {}
 

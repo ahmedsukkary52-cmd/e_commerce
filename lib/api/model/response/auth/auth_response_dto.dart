@@ -1,4 +1,4 @@
-import 'package:e_commerce/api/model/response/user_dto.dart';
+import 'package:e_commerce/api/model/response/auth/user_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_response_dto.g.dart';
