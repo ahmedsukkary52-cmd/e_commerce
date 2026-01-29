@@ -24,6 +24,11 @@ class TextApp {
     fontSize: 16.sp,
     fontWeight: FontWeight.w300,
   );
+  static TextStyle light14Blue = GoogleFonts.poppins(
+    color: ColorApp.primaryBlue,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w300,
+  );
   static TextStyle medium18Blue = GoogleFonts.poppins(
     color: ColorApp.primaryBlue,
     fontSize: 18.sp,
@@ -32,6 +37,11 @@ class TextApp {
   static TextStyle medium18White = GoogleFonts.poppins(
     color: ColorApp.primaryWhite,
     fontSize: 18.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle medium14White = GoogleFonts.poppins(
+    color: ColorApp.primaryWhite,
+    fontSize: 14.sp,
     fontWeight: FontWeight.w500,
   );
   static TextStyle medium18Gray = GoogleFonts.poppins(
@@ -111,6 +121,11 @@ class TextApp {
   );
   static TextStyle medium14DarkBlue = GoogleFonts.poppins(
     color: ColorApp.darkBlue,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle medium14Blue = GoogleFonts.poppins(
+    color: ColorApp.primaryBlue,
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
   );

@@ -1,4 +1,4 @@
-import 'package:e_commerce/Domain/use_cases/get_all_products_use_case.dart';
+import 'package:e_commerce/Domain/use_cases/product_use_case/get_all_products_use_case.dart';
 import 'package:e_commerce/core/Exceptions/exceptions_app.dart';
 import 'package:e_commerce/features/UI/pages/Home/tabs/Product/cubit/product_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

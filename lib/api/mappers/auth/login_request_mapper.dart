@@ -1,6 +1,6 @@
-import 'package:e_commerce/Domain/entities/request/login_request.dart';
+import 'package:e_commerce/Domain/entities/request/auth_request/login_request.dart';
 
-import '../../model/request/login_request_dto.dart';
+import '../../model/request/auth_request/login_request_dto.dart';
 
 extension LoginRequestMapper on LoginRequest {
   LoginRequestDto toLoginRequestDto() {

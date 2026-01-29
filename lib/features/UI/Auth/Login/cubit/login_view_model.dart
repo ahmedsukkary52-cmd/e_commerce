@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:e_commerce/Domain/entities/request/login_request.dart';
-import 'package:e_commerce/Domain/use_cases/login_use_case.dart';
+import 'package:e_commerce/Domain/entities/request/auth_request/login_request.dart';
+import 'package:e_commerce/Domain/use_cases/auth_use_case/login_use_case.dart';
 import 'package:e_commerce/core/Exceptions/exceptions_app.dart';
 import 'package:e_commerce/features/UI/Auth/auth_states.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +24,7 @@ class LoginViewModel extends Cubit<AuthStates> {
           password: password,
         );
         var authResponse = await loginUseCase.invoke(loginRequest);
+
         emit(AuthSuccessState(authResponse: authResponse));
       }
     } on ExceptionsApp catch (e) {

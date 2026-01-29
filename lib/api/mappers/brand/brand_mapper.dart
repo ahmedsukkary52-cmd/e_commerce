@@ -1,4 +1,4 @@
-import 'package:e_commerce/api/model/response/brand/brand_data_dto.dart';
+import 'package:e_commerce/api/model/response/common/brand_data_dto.dart';
 
 import '../../../Domain/entities/response/brand/brand_data.dart';
 

@@ -1,5 +1,7 @@
 import 'package:e_commerce/Domain/entities/response/product/product_data.dart';
 import 'package:e_commerce/api/mappers/brand/brand_mapper.dart';
+import 'package:e_commerce/api/mappers/category/category_mapper.dart';
+import 'package:e_commerce/api/mappers/product/sub_category_mapper.dart';
 import 'package:e_commerce/api/model/response/product/product_data_dto.dart';
 
 extension ProductMapper on ProductDataDto {
@@ -9,8 +11,8 @@ extension ProductMapper on ProductDataDto {
       slug: slug,
       id: id,
       createdAt: createdAt,
-      brand: brand,
-      category: category,
+      brand: brand?.toData(),
+      category: category?.toCategory(),
       description: description,
       imageCover: imageCover,
       images: images,
@@ -19,7 +21,8 @@ extension ProductMapper on ProductDataDto {
       ratingsAverage: ratingsAverage,
       ratingsQuantity: ratingsQuantity,
       sold: sold,
-      subcategory: subcategory,
+      subcategory:
+          subcategory?.map((subDto) => subDto.toSubCategory()).toList() ?? [],
       title: title,
     );
   }

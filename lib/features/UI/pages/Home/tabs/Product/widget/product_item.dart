@@ -3,13 +3,17 @@ import 'package:e_commerce/Domain/entities/response/product/product_data.dart';
 import 'package:e_commerce/core/Utils/assets_app.dart';
 import 'package:e_commerce/core/Utils/color_app.dart';
 import 'package:e_commerce/core/Utils/text_app.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Favorite/cubit/favorite_states.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Favorite/cubit/favorite_view_model.dart';
+import 'package:e_commerce/features/UI/pages/cart_screen/cubit/cart_view_model.dart';
+import 'package:e_commerce/features/UI/widgets/like_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductData productData;
-
   const ProductItem({super.key, required this.productData});
 
   @override
@@ -44,22 +48,28 @@ class ProductItem extends StatelessWidget {
               Positioned(
                 top: 0,
                 right: 0,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          spreadRadius: -10,
-                          blurRadius: 24,
-                          blurStyle: BlurStyle.normal,
-                          color: Colors.black54,
-                        ),
-                      ],
-                    ),
-                    child: SvgPicture.asset(AssetsApp.like),
-                  ),
+                child: BlocBuilder<FavoriteViewModel, FavoriteStates>(
+                  buildWhen: (previous, current) {
+                    if (current is FavoriteSuccessState) {
+                      return current.productId == productData.id;
+                    }
+                    return current is FavoriteListSuccessState;
+                  },
+                  builder: (context, state) {
+                    final favCubit = context.read<FavoriteViewModel>();
+                    final isFav = favCubit.isFavorite(productData.id ?? '');
+
+                    return LikeWidget(
+                      isLike: isFav,
+                      onTap: () {
+                        if (isFav) {
+                          favCubit.deleteFavorite(productData.id ?? '');
+                        } else {
+                          favCubit.addFavorite(productData.id ?? '');
+                        }
+                      },
+                    );
+                  },
                 ),
               ),
             ],
@@ -105,7 +115,9 @@ class ProductItem extends StatelessWidget {
                     const Spacer(flex: 1),
                     InkWell(
                       onTap: () {
-                        // todo: add product
+                        CartViewModel.get(
+                          context,
+                        ).addToCart(productData.id ?? '');
                       },
                       splashColor: ColorApp.transparent,
                       child: SvgPicture.asset(AssetsApp.addPro),
