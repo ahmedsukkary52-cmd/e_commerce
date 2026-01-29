@@ -1,0 +1,110 @@
+import 'package:e_commerce/config/di.dart';
+import 'package:e_commerce/core/Utils/color_app.dart';
+import 'package:e_commerce/core/Utils/routes_App.dart';
+import 'package:e_commerce/core/Utils/toast_utils.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Favorite/cubit/favorite_states.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Favorite/cubit/favorite_view_model.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Product/cubit/product_state.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Product/cubit/product_view_model.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Product/widget/product_item.dart';
+import 'package:e_commerce/features/UI/pages/Home/widget/main_error_widget.dart';
+import 'package:e_commerce/features/UI/pages/Home/widget/main_loading_widget.dart';
+import 'package:e_commerce/features/UI/pages/cart_screen/cubit/cart_states.dart';
+import 'package:e_commerce/features/UI/pages/cart_screen/cubit/cart_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class ProductScreen extends StatefulWidget {
+  const ProductScreen({super.key});
+
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
+  ProductViewModel viewModel = getIt<ProductViewModel>();
+  FavoriteViewModel favoriteViewModel = getIt<FavoriteViewModel>();
+  @override
+  void initState() {
+    super.initState();
+    viewModel.getAllProduct();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<FavoriteViewModel, FavoriteStates>(
+      listener: (context, state) {
+        if (state is FavoriteSuccessState) {
+          ToastMessage.toastMsg(
+            message: state.isLiked
+                ? 'Added to favorites'
+                : 'Removed from favorites',
+            background:
+            state.isLiked ? ColorApp.greenColor : ColorApp.redColor,
+            textColor: ColorApp.primaryWhite,
+          );
+        }
+        else if (state is FavoriteErrorState) {
+          ToastMessage.toastMsg(message: state.message);
+        }
+      },
+      child: BlocListener<CartViewModel, AddCartStates>(
+        listener: (context, state) {
+          if (state is AddCartSuccessState) {
+            ToastMessage.toastMsg(
+                message: 'Added Item Successfully',
+                background: ColorApp.greenColor,
+                textColor: ColorApp.primaryWhite);
+          } else if (state is AddCartErrorState) {
+            ToastMessage.toastMsg(
+                message: state.message,
+                background: ColorApp.redColor,
+                textColor: ColorApp.primaryWhite);
+          }
+        },
+        child: BlocBuilder<ProductViewModel, ProductState>(
+          bloc: viewModel,
+          builder: (context, state) {
+            if (state is ProductErrorState) {
+              return MainErrorWidget(errorMessage: state.errorMessage);
+            } else if (state is ProductSuccessState) {
+              return SafeArea(child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 30.h,),
+                  Expanded(
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: .8.h,
+                          crossAxisSpacing: 16.w,
+                          mainAxisSpacing: 16.h,
+                        ),
+                        itemCount: state.productList?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                  RoutesApp.productDetails,
+                                  arguments: state.productList![index]
+                              );
+                            },
+                            child: ProductItem(productData: state
+                                .productList![index]),
+                          );
+                        },
+                      )
+                  )
+                ],
+              ));
+            } else {
+              return MainLoadingWidget();
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
