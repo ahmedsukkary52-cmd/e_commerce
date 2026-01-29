@@ -1,11 +1,11 @@
-import 'package:e_commerce/api/model/response/brand/brand_data_dto.dart';
-import 'package:e_commerce/api/model/response/category/category_dto.dart';
-import 'package:e_commerce/api/model/response/product/product_subcategory_dto.dart';
+import 'package:e_commerce/Domain/entities/response/brand/brand_data.dart';
+import 'package:e_commerce/Domain/entities/response/category/category.dart';
+import 'package:e_commerce/Domain/entities/response/product/product_subcategory.dart';
 
 class ProductData {
   final int? sold;
   final List<String>? images;
-  final List<SubcategoryDto>? subcategory;
+  final List<Subcategory>? subcategory;
   final int? ratingsQuantity;
   final String? title;
   final String? slug;
@@ -13,8 +13,8 @@ class ProductData {
   final int? quantity;
   final int? price;
   final String? imageCover;
-  final CategoryDto? category;
-  final DataDto? brand;
+  final Category? category;
+  final Data? brand;
   final double? ratingsAverage;
   final String? createdAt;
   final String? updatedAt;

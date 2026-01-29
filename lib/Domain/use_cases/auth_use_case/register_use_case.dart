@@ -1,4 +1,4 @@
-import 'package:e_commerce/Domain/entities/request/register_request.dart';
+import 'package:e_commerce/Domain/entities/request/auth_request/register_request.dart';
 import 'package:e_commerce/Domain/entities/response/auth/auth_response.dart';
 import 'package:e_commerce/Domain/repositories/auth/auth_repository.dart';
 import 'package:injectable/injectable.dart';

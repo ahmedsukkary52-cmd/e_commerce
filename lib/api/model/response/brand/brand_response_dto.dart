@@ -1,4 +1,4 @@
-import 'package:e_commerce/api/model/response/brand/brand_data_dto.dart';
+import 'package:e_commerce/api/model/response/common/brand_data_dto.dart';
 import 'package:e_commerce/api/model/response/brand/brand_meta_data_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 

@@ -1,7 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce/core/Utils/color_app.dart';
 import 'package:e_commerce/core/Utils/text_app.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Favorite/cubit/favorite_states.dart';
+import 'package:e_commerce/features/UI/pages/Home/tabs/Favorite/cubit/favorite_view_model.dart';
+import 'package:e_commerce/features/UI/pages/Home/widget/counter_widget.dart';
+import 'package:e_commerce/features/UI/pages/cart_screen/cubit/cart_view_model.dart';
+import 'package:e_commerce/features/UI/widgets/badge_widget.dart';
+import 'package:e_commerce/features/UI/widgets/like_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,12 +25,16 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  int productCounter = 0;
-  double totalPrice = 0;
+  int productCounter = 1;
 
   @override
   Widget build(BuildContext context) {
-    var product = ModalRoute.of(context)!.settings.arguments as ProductData;
+    final product =
+    ModalRoute
+        .of(context)!
+        .settings
+        .arguments as ProductData;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Product Details', style: TextApp.semiBold20Blue),
@@ -33,17 +44,12 @@ class _ProductDetailsState extends State<ProductDetails> {
             onPressed: () {},
             icon: SvgPicture.asset(AssetsApp.search),
           ),
-          IconButton(onPressed: () {}, icon: SvgPicture.asset(AssetsApp.cart)),
+          const BadgeWidget(),
         ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(
-            top: 16.h,
-            bottom: 50.h,
-            right: 16.w,
-            left: 16.w,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,32 +62,42 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
                 child: Stack(
                   children: [
-                    _buildImagesSec(images: product.images!),
+                    _buildImagesSec(images: product.images ?? []),
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                spreadRadius: -10,
-                                blurRadius: 24,
-                                blurStyle: BlurStyle.normal,
-                                color: Colors.black54,
-                              ),
-                            ],
-                          ),
-                          child: SvgPicture.asset(AssetsApp.like),
-                        ),
+                      child: BlocBuilder<FavoriteViewModel, FavoriteStates>(
+                        buildWhen: (previous, current) {
+                          if (current is FavoriteSuccessState) {
+                            return current.productId == product.id;
+                          }
+                          return current is FavoriteListSuccessState;
+                        },
+                        builder: (context, state) {
+                          final favCubit =
+                          context.read<FavoriteViewModel>();
+                          final isFav =
+                          favCubit.isFavorite(product.id ?? '');
+
+                          return LikeWidget(
+                            isLike: isFav,
+                            onTap: () {
+                              if (isFav) {
+                                favCubit.deleteFavorite(product.id ?? '');
+                              } else {
+                                favCubit.addFavorite(product.id ?? '');
+                              }
+                            },
+                          );
+                        },
                       ),
                     ),
                   ],
                 ),
               ),
+
               SizedBox(height: 16.h),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -95,11 +111,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Text(
                     'EGP ${product.price}',
                     style: TextApp.medium18DarkBlue,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
+
               SizedBox(height: 16.h),
+
               Row(
                 children: [
                   Expanded(
@@ -118,7 +135,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: Text(
                         '${product.sold}',
                         style: TextApp.medium14DarkBlue,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
@@ -126,53 +142,88 @@ class _ProductDetailsState extends State<ProductDetails> {
                   SvgPicture.asset(AssetsApp.star),
                   SizedBox(width: 4.w),
                   Text(
-                    '${product.ratingsQuantity}(${product.ratingsAverage})',
+                    '${product.ratingsQuantity} (${product.ratingsAverage})',
                     style: TextApp.regular14DarkBlue,
                   ),
                   SizedBox(width: 18.w),
-                  _buildCounterSec(product.price?.toDouble() ?? 0),
+                  SizedBox(
+                    height: 40.h,
+                    child: CounterWidget(
+                      counter: productCounter,
+                      onTapIncrement: () {
+                        setState(() {
+                          productCounter++;
+                        });
+                      },
+                      onTapDecement: () {
+                        if (productCounter > 1) {
+                          setState(() {
+                            productCounter--;
+                          });
+                        }
+                      },
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(height: 8.h),
+
+              SizedBox(height: 12.h),
+
               Text('Description', style: TextApp.medium18DarkBlue),
               SizedBox(height: 8.h),
               ReadMoreText(
                 product.description ?? '',
                 style: TextApp.medium14DTB,
-                trimCollapsedText: ' Read More',
-                trimExpandedText: ' Read Less',
                 trimLines: 3,
                 trimMode: TrimMode.Line,
+                trimCollapsedText: ' Read More',
+                trimExpandedText: ' Read Less',
                 colorClickableText: ColorApp.primaryBlue,
               ),
+
               SizedBox(height: 30.h),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 8.h,
                     children: [
-                      Text("Total Price", style: TextApp.medium18Gray),
-                      Text('EGP $totalPrice', style: TextApp.medium18DarkBlue),
+                      Text('Total Price',
+                          style: TextApp.medium18Gray),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'EGP ${product.price! * productCounter}',
+                        style: TextApp.medium18DarkBlue,
+                      ),
                     ],
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 32.w,
-                      vertical: 12.h,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22.r),
-                      color: ColorApp.primaryBlue,
-                    ),
-                    child: Row(
-                      spacing: 24.w,
-                      children: [
-                        SvgPicture.asset(AssetsApp.addToCart),
-                        Text('Add To Cart', style: TextApp.medium20White),
-                        SizedBox(),
-                      ],
+                  InkWell(
+                    onTap: () {
+                      CartViewModel.get(context).addToCart(
+                          product.id ?? '',
+                          count: productCounter
+                      );
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 32.w,
+                        vertical: 12.h,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.r),
+                        color: ColorApp.primaryBlue,
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(AssetsApp.addToCart),
+                          SizedBox(width: 16.w),
+                          Text(
+                            'Add To Cart',
+                            style: TextApp.medium20White,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -184,64 +235,28 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Widget _buildCounterSec(double price) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w),
-      decoration: BoxDecoration(
-        color: ColorApp.primaryBlue,
-        borderRadius: BorderRadius.circular(22.r),
-      ),
-      child: Row(
-        spacing: 12.w,
-        children: [
-          IconButton(
-            onPressed: () {
-              if (productCounter > 0) {
-                productCounter--;
-                totalPrice -= price;
-                setState(() {});
-              }
-            },
-            icon: SvgPicture.asset(AssetsApp.minus),
-          ),
-          Text('$productCounter', style: TextApp.medium18White),
-          IconButton(
-            onPressed: () {
-              productCounter++;
-              totalPrice = price * productCounter;
-              setState(() {});
-            },
-            icon: SvgPicture.asset(AssetsApp.plus),
-          ),
-        ],
-      ),
-    );
-  }
-
   ImageSlideshow _buildImagesSec({required List<String> images}) {
     return ImageSlideshow(
       indicatorColor: ColorApp.primaryBlue,
       height: 300.h,
       autoPlayInterval: 5000,
       isLoop: true,
-      initialPage: 0,
       indicatorRadius: 5,
       indicatorBottomPadding: 15.h,
-      indicatorPadding: 8.w,
       indicatorBackgroundColor: ColorApp.strokeBlue,
       children: images.map((url) {
         return CachedNetworkImage(
           imageUrl: url,
-          height: 300,
           fit: BoxFit.contain,
-          placeholder: (context, url) => Center(
+          placeholder: (_, __) =>
+              Center(
             child: CircularProgressIndicator(
               strokeWidth: 1.8,
               color: ColorApp.gray,
             ),
           ),
-          errorWidget: (context, url, error) =>
-              Center(child: Icon(Icons.error, color: ColorApp.redColor)),
+          errorWidget: (_, __, ___) =>
+          const Icon(Icons.error),
         );
       }).toList(),
     );

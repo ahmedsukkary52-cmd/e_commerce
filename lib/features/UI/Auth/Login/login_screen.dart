@@ -5,6 +5,7 @@ import 'package:e_commerce/core/Utils/dialog_utils.dart';
 import 'package:e_commerce/core/Utils/routes_App.dart';
 import 'package:e_commerce/core/Utils/text_app.dart';
 import 'package:e_commerce/core/Utils/validators_app.dart';
+import 'package:e_commerce/core/cache/shared_prefs_utils.dart';
 import 'package:e_commerce/features/UI/Auth/Login/cubit/login_view_model.dart';
 import 'package:e_commerce/features/UI/Auth/auth_states.dart';
 import 'package:e_commerce/features/UI/widgets/custom_elevatedButton.dart';
@@ -59,7 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
               message: "Login Successfully",
               posActionName: 'ok',
               posActionFunction: () {
-                Navigator.pop(context);
+                SharedPrefsUtils.saveData(
+                    key: 'token', value: state.authResponse.token);
+                SharedPrefsUtils.saveData(key: 'email', value: email.text);
+                SharedPrefsUtils.saveData(
+                    key: 'password', value: password.text);
                 Navigator.pushReplacementNamed(context, RoutesApp.homeScreen);
               }
           );

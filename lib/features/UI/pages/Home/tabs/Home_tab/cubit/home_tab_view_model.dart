@@ -1,5 +1,5 @@
-import 'package:e_commerce/Domain/use_cases/get_all_brands_use_case.dart';
-import 'package:e_commerce/Domain/use_cases/get_all_category_use_case.dart';
+import 'package:e_commerce/Domain/use_cases/brand_use_case/get_all_brands_use_case.dart';
+import 'package:e_commerce/Domain/use_cases/category_use_case/get_all_category_use_case.dart';
 import 'package:e_commerce/core/Exceptions/exceptions_app.dart';
 import 'package:e_commerce/features/UI/pages/Home/tabs/Home_tab/cubit/home_tab_states.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

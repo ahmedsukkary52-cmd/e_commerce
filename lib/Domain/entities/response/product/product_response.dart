@@ -1,10 +1,10 @@
-import '../../../../api/model/response/product/product_data_dto.dart';
-import '../../../../api/model/response/product/product_meta_data_dto.dart';
+import 'package:e_commerce/Domain/entities/response/product/product_data.dart';
+import 'package:e_commerce/Domain/entities/response/product/product_meta_data.dart';
 
 class ProductResponse {
   final int? results;
-  final ProductMetadataDto? metadata;
-  final List<ProductDataDto>? data;
+  final ProductMetadata? metadata;
+  final List<ProductData>? data;
 
   ProductResponse({this.results, this.metadata, this.data});
 }

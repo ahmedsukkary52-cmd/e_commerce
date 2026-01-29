@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import '../common/metadata_dto.dart';
-import 'category_dto.dart';
+import '../common/category_dto.dart';
 
 part 'category_response_dto.g.dart';
 
