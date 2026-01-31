@@ -42,17 +42,19 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<UserViewModel, UserStates>(
       listener: (context, state) {
-        if (state is UserSuccessStates) {
-          DialogUtils.showMessage(
-            context: context,
-            message: 'Address Added Successfully',
-            posActionName: 'OK',
+        if (state is UserSuccessStates || state is GetUserSuccessStates) {
+          context.read<UserViewModel>().fillControllers(
+            name: name,
+            mobile: mobile,
           );
-          final user = context
-              .read<UserViewModel>()
-              .currentUser;
-          name.text = user?.name ?? '';
-          mobile.text = user?.phone ?? '';
+
+          if (state is UserSuccessStates) {
+            DialogUtils.showMessage(
+              context: context,
+              message: 'Address Added Successfully',
+              posActionName: 'OK',
+            );
+          }
         }
 
         if (state is UserErrorStates) {
@@ -62,15 +64,8 @@ class _UserScreenState extends State<UserScreen> {
             posActionName: 'OK',
           );
         }
-
-        if (state is GetUserSuccessStates) {
-          final user = context
-              .read<UserViewModel>()
-              .currentUser;
-          name.text = user?.name ?? '';
-          mobile.text = user?.phone ?? '';
-        }
       },
+
       builder: (context, state) {
         return Scaffold(
           body: SafeArea(
