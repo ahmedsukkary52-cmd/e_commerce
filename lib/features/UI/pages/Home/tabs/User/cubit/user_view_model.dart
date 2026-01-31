@@ -60,11 +60,10 @@ class UserViewModel extends Cubit<UserStates> {
   }
 
   void fillControllers({
-    required TextEditingController nameController,
-    required TextEditingController detailsController,
-    required TextEditingController mobileController,
+    required TextEditingController name,
+    required TextEditingController mobile,
   }) {
-    nameController.text = currentUser?.name ?? '';
-    mobileController.text = currentUser?.phone ?? '';
+    name.text = currentUser?.name ?? '';
+    mobile.text = currentUser?.phone ?? '';
   }
 }
