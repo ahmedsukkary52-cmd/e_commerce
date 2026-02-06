@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:e_commerce/Data/data_sources/remote/categories_remote_data_source.dart';
 import 'package:e_commerce/Domain/entities/response/category/category.dart';
-import 'package:e_commerce/api/api_services.dart';
+import 'package:e_commerce/api/route_api/api_services.dart';
 import 'package:e_commerce/api/mappers/category/category_mapper.dart';
 import 'package:e_commerce/core/Exceptions/exceptions_app.dart';
 import 'package:injectable/injectable.dart';

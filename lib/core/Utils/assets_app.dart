@@ -42,6 +42,9 @@ class AssetsApp {
   static const String image2 = '${_imagesPath}image2.png';
   static const String image3 = '${_imagesPath}image3.png';
 
+  static const String kiosk = '${_imagesPath}kiosk.png';
+  static const String card = '${_imagesPath}card.png';
+
   static const String route = '${_imagesPath}route.png';
   static const String routeLogoDesign = '${_imagesPath}routeLogo.png';
   static const String logoSplash = '${_imagesPath}logoSplash.png';

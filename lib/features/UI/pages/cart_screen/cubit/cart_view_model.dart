@@ -25,6 +25,7 @@ class CartViewModel extends Cubit<AddCartStates> {
 
   int numOfCartItems = 0;
   List<GetCartProducts> productsList = [];
+  int totalPrice = 0;
 
   static CartViewModel get(context) => BlocProvider.of<CartViewModel>(context);
 
