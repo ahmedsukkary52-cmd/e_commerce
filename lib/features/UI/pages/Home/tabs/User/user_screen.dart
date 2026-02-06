@@ -1,4 +1,3 @@
-import 'package:e_commerce/core/Utils/assets_app.dart';
 import 'package:e_commerce/core/Utils/color_app.dart';
 import 'package:e_commerce/core/Utils/dialog_utils.dart';
 import 'package:e_commerce/core/Utils/routes_App.dart';
@@ -6,11 +5,12 @@ import 'package:e_commerce/core/Utils/text_app.dart';
 import 'package:e_commerce/core/cache/shared_prefs_utils.dart';
 import 'package:e_commerce/features/UI/pages/Home/tabs/User/cubit/user_states.dart';
 import 'package:e_commerce/features/UI/pages/Home/tabs/User/cubit/user_view_model.dart';
+import 'package:e_commerce/features/UI/widgets/button_item_widget.dart';
 import 'package:e_commerce/features/UI/widgets/custom_textFormField.dart';
+import 'package:e_commerce/features/UI/widgets/text_field_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -79,13 +79,13 @@ class _UserScreenState extends State<UserScreen> {
                   Text(email.text, style: TextApp.medium14DTB),
                   SizedBox(height: 40.h),
 
-                  _textFieldItem(text: 'Your Full Name', controller: name),
+                  TextFieldItem(text: 'Your Full Name', controller: name),
                   _textFieldItemReadOnly(
                       text: 'Your E-mail', controller: email),
                   _textFieldItemReadOnly(text: 'Your Password',
                       controller: password,
                       obscureText: true),
-                  _textFieldItem(
+                  TextFieldItem(
                       text: 'Your mobile number', controller: mobile),
 
                   SizedBox(height: 24.h),
@@ -110,21 +110,7 @@ class _UserScreenState extends State<UserScreen> {
                         },
                       );
                     },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.w, vertical: 18.h),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: ColorApp.primaryBlue,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Logout', style: TextApp.medium20White),
-                          Icon(Icons.logout, color: ColorApp.primaryWhite),
-                        ],
-                      ),
-                    ),
+                      child: ButtonItem(text: 'Logout', icon: Icons.logout)
                   ),
                 ],
               ),
@@ -134,32 +120,6 @@ class _UserScreenState extends State<UserScreen> {
       },
     );
   }
-
-  Widget _textFieldItem({
-    required String text,
-    required TextEditingController controller,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(text, style: TextApp.medium18DarkBlue),
-        SizedBox(height: 16.h),
-        CustomTextField(
-          hintText: text,
-          hintTextStyle: TextApp.medium14DarkBlue,
-          enableBorderColor: ColorApp.strokeBlue,
-          focusBorderColor: ColorApp.primaryBlue,
-          suffixIcon: Padding(
-            padding: EdgeInsets.all(8.0.h),
-            child: SvgPicture.asset(AssetsApp.edit),
-          ),
-          controller: controller,
-        ),
-        SizedBox(height: 24.h),
-      ],
-    );
-  }
-
   Widget _textFieldItemReadOnly({
     required String text,
     required TextEditingController controller,

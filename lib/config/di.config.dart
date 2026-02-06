@@ -14,7 +14,6 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart' as _i528;
 
-import '../api/api_services.dart' as _i124;
 import '../api/data_sources/remote/add_cart_remote_data_source_impl.dart'
     as _i885;
 import '../api/data_sources/remote/auth_remote_data_source_impl.dart' as _i668;
@@ -27,6 +26,9 @@ import '../api/data_sources/remote/product_remote_data_source_impl.dart'
     as _i544;
 import '../api/data_sources/remote/user_remote_data_source_impl.dart' as _i271;
 import '../api/dio/dio_module.dart' as _i223;
+import '../api/dio/payment_dio/payment_dio_module.dart' as _i500;
+import '../api/payment_api/payment_api_services.dart' as _i584;
+import '../api/route_api/api_services.dart' as _i533;
 import '../Data/data_sources/remote/add_cart_remote_data_source.dart' as _i960;
 import '../Data/data_sources/remote/auth_remote_data_source.dart' as _i186;
 import '../Data/data_sources/remote/brand_remote_data_source.dart' as _i781;
@@ -40,6 +42,7 @@ import '../Data/repositories/brand/brand_repository_impl.dart' as _i1029;
 import '../Data/repositories/cart/add_cart_repository_impl.dart' as _i671;
 import '../Data/repositories/category/categories_repository_impl.dart' as _i56;
 import '../Data/repositories/favorite/favorite_repository_impl.dart' as _i302;
+import '../Data/repositories/payment/payment_repository_impl.dart' as _i1073;
 import '../Data/repositories/product/product_repository_impl.dart' as _i395;
 import '../Data/repositories/user_profile/user_profile_repository_impl.dart'
     as _i144;
@@ -48,6 +51,7 @@ import '../Domain/repositories/brand/brand_repository.dart' as _i295;
 import '../Domain/repositories/cart/add_cart_repository.dart' as _i748;
 import '../Domain/repositories/categories/categories_repository.dart' as _i650;
 import '../Domain/repositories/favorite/favorite_repository.dart' as _i491;
+import '../Domain/repositories/payment/payment_repository.dart' as _i917;
 import '../Domain/repositories/product/product_repository.dart' as _i830;
 import '../Domain/repositories/user_profile/user_profile_repository.dart'
     as _i8;
@@ -70,6 +74,7 @@ import '../Domain/use_cases/favorite_use_case/delete_favorite_item_use_case.dart
     as _i723;
 import '../Domain/use_cases/favorite_use_case/get_favorite_use_case.dart'
     as _i214;
+import '../Domain/use_cases/payment_use_case/payment_use_case.dart' as _i751;
 import '../Domain/use_cases/product_use_case/get_all_products_use_case.dart'
     as _i787;
 import '../Domain/use_cases/user_profile/add_user_use_case.dart' as _i295;
@@ -86,6 +91,7 @@ import '../features/UI/pages/Home/tabs/Product/cubit/product_view_model.dart'
     as _i611;
 import '../features/UI/pages/Home/tabs/User/cubit/user_view_model.dart'
     as _i806;
+import '../features/UI/pages/payment/cubit/payment_view_model.dart' as _i493;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -95,63 +101,58 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final getItModule = _$GetItModule();
+    final paymentModule = _$PaymentModule();
     gh.factory<_i206.HomeScreenViewModel>(() => _i206.HomeScreenViewModel());
-    gh.singleton<_i361.BaseOptions>(() => getItModule.provideBaseOptions());
     gh.singleton<_i528.PrettyDioLogger>(
       () => getItModule.providePrettyDioLogger(),
     );
+    gh.singleton<_i361.BaseOptions>(
+      () => getItModule.provideBaseOptions(),
+      instanceName: 'appBaseOptions',
+    );
+    gh.singleton<_i361.BaseOptions>(
+      () => paymentModule.providePaymentBaseOptions(),
+      instanceName: 'paymentBaseOptions',
+    );
     gh.singleton<_i361.Dio>(
-      () => getItModule.provideDio(
-        gh<_i361.BaseOptions>(),
+      () => paymentModule.providePaymentDio(
+        gh<_i361.BaseOptions>(instanceName: 'paymentBaseOptions'),
         gh<_i528.PrettyDioLogger>(),
       ),
+      instanceName: 'paymentDio',
     );
-    gh.singleton<_i124.ApiServices>(
-      () => getItModule.provideApiServices(gh<_i361.Dio>()),
+    gh.singleton<_i361.Dio>(
+      () => getItModule.provideDio(
+        gh<_i361.BaseOptions>(instanceName: 'appBaseOptions'),
+        gh<_i528.PrettyDioLogger>(),
+      ),
+      instanceName: 'appDio',
     );
-    gh.factory<_i395.UserRemoteDataSource>(
+    gh.singleton<_i584.PaymentApiServices>(
+      () => paymentModule.providePaymentApiServices(
+        gh<_i361.Dio>(instanceName: 'paymentDio'),
+      ),
+    );
+    gh.singleton<_i533.ApiServices>(
       () =>
-          _i271.UserRemoteDataSourceImpl(apiServices: gh<_i124.ApiServices>()),
+          getItModule.provideApiServices(gh<_i361.Dio>(instanceName: 'appDio')),
     );
     gh.factory<_i715.FavoriteRemoteDataSource>(
       () => _i921.FavoriteRemoteDataSourceImpl(
-        apiServices: gh<_i124.ApiServices>(),
+        apiServices: gh<_i533.ApiServices>(),
       ),
     );
-    gh.factory<_i960.AddCartRemoteDataSource>(
-      () => _i885.AddCartRemoteDataSourceImpl(
-        apiServices: gh<_i124.ApiServices>(),
-      ),
-    );
-    gh.factory<_i739.ProductRemoteDataSource>(
-      () => _i544.ProductRemoteDataSourceImpl(
-        apiServices: gh<_i124.ApiServices>(),
-      ),
-    );
-    gh.factory<_i176.CategoriesRemoteDataSource>(
-      () => _i486.CategoriesRemoteDataSourceImpl(
-        apiServices: gh<_i124.ApiServices>(),
-      ),
-    );
-    gh.factory<_i186.AuthRemoteDataSource>(
+    gh.factory<_i395.UserRemoteDataSource>(
       () =>
-          _i668.AuthRemoteDataSourceImpl(apiServices: gh<_i124.ApiServices>()),
+          _i271.UserRemoteDataSourceImpl(apiServices: gh<_i533.ApiServices>()),
     );
     gh.factory<_i8.UserProfileRepository>(
       () => _i144.UserProfileRepositoryImpl(
         remoteDataSource: gh<_i395.UserRemoteDataSource>(),
       ),
     );
-    gh.factory<_i687.AuthRepository>(
-      () => _i690.AuthRepositoryImpl(
-        authRemoteDataSource: gh<_i186.AuthRemoteDataSource>(),
-      ),
-    );
-    gh.factory<_i471.LoginUseCase>(
-      () => _i471.LoginUseCase(authRepository: gh<_i687.AuthRepository>()),
-    );
-    gh.factory<_i344.RegisterUseCase>(
-      () => _i344.RegisterUseCase(authRepository: gh<_i687.AuthRepository>()),
+    gh.factory<_i917.PaymentRepository>(
+      () => _i1073.PaymentRepositoryImpl(gh<_i584.PaymentApiServices>()),
     );
     gh.factory<_i295.AddUserUseCase>(
       () => _i295.AddUserUseCase(
@@ -160,20 +161,35 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i781.BrandRemoteDataSource>(
       () =>
-          _i304.BrandRemoteDataSourceImpl(apiServices: gh<_i124.ApiServices>()),
+          _i304.BrandRemoteDataSourceImpl(apiServices: gh<_i533.ApiServices>()),
+    );
+    gh.factory<_i186.AuthRemoteDataSource>(
+      () =>
+          _i668.AuthRemoteDataSourceImpl(apiServices: gh<_i533.ApiServices>()),
     );
     gh.factory<_i295.BrandRepository>(
       () => _i1029.BrandRepositoryImpl(
         remoteDataSource: gh<_i781.BrandRemoteDataSource>(),
       ),
     );
-    gh.factory<_i918.RegisterViewModel>(
-      () =>
-          _i918.RegisterViewModel(registerUseCase: gh<_i344.RegisterUseCase>()),
+    gh.factory<_i176.CategoriesRemoteDataSource>(
+      () => _i486.CategoriesRemoteDataSourceImpl(
+        apiServices: gh<_i533.ApiServices>(),
+      ),
+    );
+    gh.factory<_i739.ProductRemoteDataSource>(
+      () => _i544.ProductRemoteDataSourceImpl(
+        apiServices: gh<_i533.ApiServices>(),
+      ),
     );
     gh.factory<_i491.FavoriteRepository>(
       () => _i302.FavoriteRepositoryImpl(
         remoteDataSource: gh<_i715.FavoriteRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i960.AddCartRemoteDataSource>(
+      () => _i885.AddCartRemoteDataSourceImpl(
+        apiServices: gh<_i533.ApiServices>(),
       ),
     );
     gh.factory<_i830.ProductRepository>(
@@ -211,9 +227,6 @@ extension GetItInjectableX on _i174.GetIt {
         getAllProductsUseCase: gh<_i787.GetAllProductsUseCase>(),
       ),
     );
-    gh.factory<_i165.LoginViewModel>(
-      () => _i165.LoginViewModel(loginUseCase: gh<_i471.LoginUseCase>()),
-    );
     gh.factory<_i441.DeleteItemsInCartUseCase>(
       () => _i441.DeleteItemsInCartUseCase(
         cartRepository: gh<_i748.CartRepository>(),
@@ -224,8 +237,16 @@ extension GetItInjectableX on _i174.GetIt {
         cartRepository: gh<_i748.CartRepository>(),
       ),
     );
+    gh.factory<_i751.PaymentUseCase>(
+      () => _i751.PaymentUseCase(
+        paymentRepository: gh<_i917.PaymentRepository>(),
+      ),
+    );
     gh.factory<_i272.GetUserUseCase>(
       () => _i272.GetUserUseCase(repository: gh<_i8.UserProfileRepository>()),
+    );
+    gh.factory<_i493.PaymentViewModel>(
+      () => _i493.PaymentViewModel(gh<_i751.PaymentUseCase>()),
     );
     gh.factory<_i650.CategoriesRepository>(
       () => _i56.CategoriesRepositoryImpl(
@@ -257,6 +278,17 @@ extension GetItInjectableX on _i174.GetIt {
         categoriesRepository: gh<_i650.CategoriesRepository>(),
       ),
     );
+    gh.factory<_i687.AuthRepository>(
+      () => _i690.AuthRepositoryImpl(
+        authRemoteDataSource: gh<_i186.AuthRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i471.LoginUseCase>(
+      () => _i471.LoginUseCase(authRepository: gh<_i687.AuthRepository>()),
+    );
+    gh.factory<_i344.RegisterUseCase>(
+      () => _i344.RegisterUseCase(authRepository: gh<_i687.AuthRepository>()),
+    );
     gh.factory<_i424.CartViewModel>(
       () => _i424.CartViewModel(
         addToCartUseCase: gh<_i985.AddToCartUseCase>(),
@@ -278,8 +310,17 @@ extension GetItInjectableX on _i174.GetIt {
         deleteFavoriteItemUseCase: gh<_i723.DeleteFavoriteItemUseCase>(),
       ),
     );
+    gh.factory<_i918.RegisterViewModel>(
+      () =>
+          _i918.RegisterViewModel(registerUseCase: gh<_i344.RegisterUseCase>()),
+    );
+    gh.factory<_i165.LoginViewModel>(
+      () => _i165.LoginViewModel(loginUseCase: gh<_i471.LoginUseCase>()),
+    );
     return this;
   }
 }
 
 class _$GetItModule extends _i223.GetItModule {}
+
+class _$PaymentModule extends _i500.PaymentModule {}

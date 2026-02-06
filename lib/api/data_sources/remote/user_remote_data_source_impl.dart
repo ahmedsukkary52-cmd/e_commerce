@@ -2,7 +2,7 @@ import 'package:e_commerce/Data/data_sources/remote/user_remote_date_source.dart
 import 'package:e_commerce/Domain/entities/request/user_request/user_profile_request.dart';
 import 'package:e_commerce/Domain/entities/response/user_profile/add_user/user_profile_response.dart';
 import 'package:e_commerce/Domain/entities/response/user_profile/get_user/get_user_response.dart';
-import 'package:e_commerce/api/api_services.dart';
+import 'package:e_commerce/api/route_api/api_services.dart';
 import 'package:e_commerce/api/mappers/user/add_user/user_profile_mapper.dart';
 import 'package:e_commerce/api/mappers/user/add_user/user_profile_request_mapper.dart';
 import 'package:e_commerce/api/mappers/user/get_user/get_user_mapper.dart';

@@ -8,4 +8,8 @@ class RoutesApp {
   static const String favorite = 'favorite';
   static const String homeTab = 'homeTab';
   static const String productDetails = 'productDetails';
+  static const String choosePaymentMethodScreen = 'choosePaymentMethodScreen';
+  static const String paymentScreen = 'paymentScreen';
+  static const String paymentCardScreen = 'paymentCardScreen';
+  static const String paymentKioskScreen = 'paymentKioskScreen';
 }

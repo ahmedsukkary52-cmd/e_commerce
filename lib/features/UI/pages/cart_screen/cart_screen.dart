@@ -1,5 +1,6 @@
 import 'package:e_commerce/core/Utils/assets_app.dart';
 import 'package:e_commerce/core/Utils/color_app.dart';
+import 'package:e_commerce/core/Utils/routes_App.dart';
 import 'package:e_commerce/core/Utils/text_app.dart';
 import 'package:e_commerce/core/Utils/toast_utils.dart';
 import 'package:e_commerce/features/UI/pages/Home/widget/main_error_widget.dart';
@@ -60,6 +61,9 @@ class _CartScreenState extends State<CartScreen> {
             if (state is GetCartErrorState) {
               return MainErrorWidget(errorMessage: state.message);
             } else if (state is GetCartSuccessState) {
+              CartViewModel
+                  .get(context)
+                  .totalPrice = state.getCartData.totalCartPrice ?? 00;
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Column(
@@ -90,24 +94,31 @@ class _CartScreenState extends State<CartScreen> {
                               ),
                             ],
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 32.w,
-                              vertical: 12.h,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(22.r),
-                              color: ColorApp.primaryBlue,
-                            ),
-                            child: Row(
-                              spacing: 24.w,
-                              children: [
-                                Text('Check Out', style: TextApp.medium20White),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: ColorApp.primaryWhite,
-                                ),
-                              ],
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, RoutesApp.paymentScreen);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 32.w,
+                                vertical: 12.h,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(22.r),
+                                color: ColorApp.primaryBlue,
+                              ),
+                              child: Row(
+                                spacing: 24.w,
+                                children: [
+                                  Text('Check Out',
+                                      style: TextApp.medium20White),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: ColorApp.primaryWhite,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

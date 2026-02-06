@@ -9,6 +9,7 @@ class ThemeApp {
       elevation: 0,
       backgroundColor: ColorApp.primaryWhite,
       iconTheme: IconThemeData(color: ColorApp.primaryBlue),
+      centerTitle: true,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       showSelectedLabels: false,

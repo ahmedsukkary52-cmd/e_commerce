@@ -6,6 +6,10 @@ import 'package:e_commerce/features/UI/pages/Home/tabs/Home_tab/home_tab.dart';
 import 'package:e_commerce/features/UI/pages/Home/tabs/User/cubit/user_view_model.dart';
 import 'package:e_commerce/features/UI/pages/cart_screen/cart_screen.dart';
 import 'package:e_commerce/features/UI/pages/cart_screen/cubit/cart_view_model.dart';
+import 'package:e_commerce/features/UI/pages/payment/card_payment_screen.dart';
+import 'package:e_commerce/features/UI/pages/payment/choose_payment_method.dart';
+import 'package:e_commerce/features/UI/pages/payment/cubit/payment_view_model.dart';
+import 'package:e_commerce/features/UI/pages/payment/payment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,6 +43,7 @@ void main() async {
         BlocProvider(create: (context) => getIt<CartViewModel>()),
         BlocProvider(create: (context) => getIt<FavoriteViewModel>()),
         BlocProvider(create: (context) => getIt<UserViewModel>()),
+        BlocProvider(create: (context) => getIt<PaymentViewModel>()),
       ],
       child: EcommerceApp(routeName: routeName),
     ),
@@ -70,6 +75,10 @@ class EcommerceApp extends StatelessWidget {
             RoutesApp.homeTab: (context) => HomeTab(),
             RoutesApp.cart: (context) => CartScreen(),
             RoutesApp.productDetails: (context) => ProductDetails(),
+            RoutesApp.paymentScreen: (context) => PaymentScreen(),
+            RoutesApp.choosePaymentMethodScreen: (context) =>
+                ChoosePaymentMethodScreen(),
+            RoutesApp.paymentCardScreen: (context) => CardPaymentScreen(),
           },
           theme: ThemeApp.lightTheme,
           themeMode: ThemeMode.light,
